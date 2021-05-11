@@ -16,13 +16,16 @@ on:
 jobs:
 
   cancel-runs:
-    #runs-on: ubuntu-latest
+    name: "Cancel the self CI workflow run"
     runs-on: ubuntu-latest
     steps:
-      - name: cancel running workflows
-        uses: everphone-gmbh/cancel-previous-workflows@v5
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+      - name: "Cancel workflow 1"
+        uses: potiuk/cancel-workflow-runs@master
+        with:
+          cancelMode: allDuplicates
+          cancelFutureDuplicates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          workflowFileName: ci.yml
 #    steps:
 #    - uses: actions/checkout@v1
 #    - uses: n1hility/cancel-previous-runs@v2
