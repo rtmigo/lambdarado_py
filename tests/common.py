@@ -25,7 +25,7 @@ def test_project_path(name: str) -> Path:
 
 
 def build_docker_by_template(project_dir: Path, entrypoint_args: List[str]):
-    template = Path('projects/Dockerfile').read_text()
+    template = Path('tests/projects/Dockerfile').read_text()
     template = template.replace('PROJECTDIR', str(project_dir))
     template = template.replace('ENTRYPOINT_ARGS',
                                 ', '.join(f'"{s}"' for s in entrypoint_args))
