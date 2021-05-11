@@ -12,7 +12,7 @@ container (`docker run ...`) to test the app.
 
 In the AWS Cloud the requests are handled with the same `app`, but in a
 different way. Lambdarado creates
-the [handler](https://docs.aws.amazon.com/lambda/latest/dg/python-handler.html),
+a [handler](https://docs.aws.amazon.com/lambda/latest/dg/python-handler.html),
 that is compatible with the combination of API Gateway + Lambda Function.
 
 ---
