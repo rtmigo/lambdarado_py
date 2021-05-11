@@ -1,5 +1,5 @@
 from flask import Flask
-from lambdorado import hybrid_server
+from lambdarado import hybrid_server
 
 app = Flask(__name__)
 
