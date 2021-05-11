@@ -35,9 +35,15 @@ jobs:
           pip install -e . --use-feature=in-tree-build
           pip install -r tests/requirements.txt
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-      - name: Run unit tests
-        run: |
-          python3 -m tests.test_local
+      - name: Run test 1
+        run: python3 -m tests.test_local 1
+      - name: Run test 2
+        run: python3 -m tests.test_local 2
+      - name: Run test 3
+        run: python3 -m tests.test_local 3
+      - name: Run test 4
+        run: python3 -m tests.test_local 4
+
 
   test-docker:
     timeout-minutes: 7
@@ -52,9 +58,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r tests/requirements.txt
-      - name: Run unit tests (docker)
-        run: |
-          python3 -m tests.test_docker
+      - name: Run test 1
+        run: python3 -m tests.test_docker 1
+      - name: Run test 2
+        run: python3 -m tests.test_docker 2
+      - name: Run test 3
+        run: python3 -m tests.test_docker 3
+      - name: Run test 4
+        run: python3 -m tests.test_docker 4
 
   test-lambda:
     concurrency:
@@ -81,10 +92,16 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r tests/requirements.txt
-      - name: Run unit tests (lambda)
-        run: |
-          python3 -m tests.test_aws
-
+      - name: Run test 1
+        run: python3 -m tests.test_aws 1
+      - name: Run test 2
+        run: python3 -m tests.test_aws 2
+      - name: Run test 3
+        run: python3 -m tests.test_aws 3
+      - name: Run test 4
+        run: python3 -m tests.test_aws 4
+      - name: Cleanup
+        run: python3 -m tests.test_aws cleanup
 #  test:
 #    timeout-minutes: 7
 #
