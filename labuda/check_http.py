@@ -9,8 +9,6 @@ GREEN = '\033[32m'
 CRESET = '\033[0m'
 
 
-
-
 def get_text(url: str) -> str:
     req = urllib.request.Request(url)
     response = urllib.request.urlopen(req)
@@ -29,5 +27,5 @@ if __name__ == "__main__":
         print(f"{RED}TEST FAILED!{CRESET}")
         exit(1)
 
-#text = get_text(f'{baseurl}/hello-server')
-    # if text != 'Hello, Client!':
+# text = get_text(f'{baseurl}/hello-server')
+# if text != 'Hello, Client!':

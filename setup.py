@@ -1,18 +1,17 @@
 from pathlib import Path
-
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(
-    name="lambdock",
+    name="lambdarado",
     version="0.0.0",
     author="Artёm IG",
     author_email="ortemeo@gmail.com",
-    url='https://github.com/rtmigo/tsfile_py',
+    url='https://github.com/rtmigo/lambdarado_py',
 
     install_requires=['apig_wsgi', 'awslambdaric'],
-    packages=['lambdock'],
+    packages=['lambdarado'],
 
-    description="Finds and parsed the timestamp.txt file",
+    description="Universal entrypoint for containerized AWS Lambda apps",
 
     long_description=(Path(__file__).parent / 'README.md').read_text(),
     long_description_content_type='text/markdown',

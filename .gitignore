@@ -2,6 +2,9 @@
 .vscode/
 .idea/
 
+*_no_git*
+labuda/
+
 # Vagrant
 .vagrant/
 

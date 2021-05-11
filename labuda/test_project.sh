@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+# todo try this https://stackoverflow.com/a/63237009
+
 docker_image_name="testing-lambdock"
 
 function hdr {
@@ -35,7 +37,6 @@ function test_local() {
 
   cd "$tmp_project_dir"
   pip3 install -r requirements.txt
-  pip3 install requests
 
   hdr "Starting server $1"
 

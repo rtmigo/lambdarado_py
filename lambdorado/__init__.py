@@ -37,8 +37,24 @@ def caller_module() -> ModuleType:
     raise RuntimeError
 
 
-def file_to_module_name(module) -> str:
-    return (module.__file__[:-3]).replace(os.path.sep, '.')
+def file_to_module_name(module: ModuleType) -> str:
+    file_absolute = os.path.abspath(module.__file__)
+    #print(f"file_abspath {file_absolute}")
+    assert os.path.exists(file_absolute)
+
+    file_relative = os.path.relpath(
+        file_absolute,
+        os.path.abspath(sys.path[0]))
+    #print(f"sys.path[0] {sys.path[0]}")
+    #print(f"sys.path[0] a {os.path.abspath(sys.path[0])}")
+    #print(f"rel {file_relative}")
+
+    assert file_relative.lower().endswith('.py')
+
+    module_name = file_relative[:-3]
+    module_name = module_name.replace(os.path.sep, '.')
+
+    return module_name
 
 
 # AWS_LAMBDA_RUNTIME_API AWS_EXECUTION_ENV
@@ -144,8 +160,9 @@ def hybrid_server(app: Flask) -> None:
     if _in_aws:
         assign_lambda_handler(module_name, app)
         if not is_called_by_awslambdaric():
-            print(f"Starting AWS Lambda RIC")
-            ric_main((None, f'{module_name}.handler'))
+            arg = f'{module_name}.handler'
+            print(f'Starting AWS Lambda RIC with arg "{arg}"')
+            ric_main((None, arg))
 
     elif caller_is_main:
         print("RUNNING!")
