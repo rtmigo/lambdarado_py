@@ -4,7 +4,7 @@
 from pathlib import Path
 from typing import List
 
-from lambdado_pipeline import set_header_prefix, docker_run, docker_stop
+from awscmds import set_header_prefix, docker_run, docker_stop
 from .common import check_base_url, build_docker_by_template, \
     docker_image_name, wait_while_connection_error, test_project_path, \
     should_run
