@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python3 -c "import neatest; print(neatest.__version__)"
+python3 -c "import lambdarado; print(lambdarado.__version__)"
