@@ -14,25 +14,11 @@ on:
 
 jobs:
 
-  cancel-runs:
-    name: "Cancel running ci.yml"
-    runs-on: ubuntu-latest
-    steps:
-      - name: "Cancel workflow 1"
-        uses: potiuk/cancel-workflow-runs@master
-        with:
-          cancelMode: allDuplicates
-          cancelFutureDuplicates: true
-          token: ${{ secrets.GITHUB_TOKEN }}
-          workflowFileName: ci.yml
-#    steps:
-#    - uses: actions/checkout@v1
-#    - uses: n1hility/cancel-previous-runs@v2
-#      with:
-#        token: ${{ secrets.GITHUB_TOKEN }}
+
+
 
   test-local:
-    needs: [cancel-runs]
+
     timeout-minutes: 7
     runs-on: ${{ matrix.os }}
     strategy:
@@ -57,7 +43,6 @@ jobs:
           python3 -m tests.test_local
 
   test-docker:
-    needs: [cancel-runs]
     timeout-minutes: 7
     runs-on: ubuntu-latest
     steps:
@@ -75,7 +60,10 @@ jobs:
           python3 -m tests.test_docker
 
   test-lambda:
-    needs: [cancel-runs]
+    concurrency:
+      group: ${{ github.head_ref }}
+      cancel-in-progress: true
+
     timeout-minutes: 7
     runs-on: ubuntu-latest
     steps:
