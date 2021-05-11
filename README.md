@@ -24,7 +24,7 @@ So the Lambdarado puts together:
   Currently, only [Flask](https://pypi.org/project/Flask/) is supported
 
 - A [Docker image](https://docs.aws.amazon.com/lambda/latest/dg/images-create.html)
-that contains the application code and dependencies
+that contains the app code and dependencies
 
 - AWS Lambda to run the code contained in the Docker image
 
