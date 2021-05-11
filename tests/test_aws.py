@@ -15,8 +15,8 @@ def test_project(project_dir: Path, entrypoint_args: List[str]):
         docker_image_name + ":latest",
         '094879913805.dkr.ecr.us-east-1.amazonaws.com/lambdarado_test:latest')
     # print("point 3")
-    lambda_function_update('us-east-1', 'lambdorado_test', pushed_image_uri)
-    check_base_url('https://jit9f5hzjk.execute-api.us-east-1.amazonaws.com')
+    lambda_function_update('us-east-1', 'lambdarado_test', pushed_image_uri)
+    check_base_url('https://sbh9z7tr30.execute-api.us-east-1.amazonaws.com')
 
 
 if __name__ == "__main__":
@@ -26,4 +26,4 @@ if __name__ == "__main__":
     test_project(Path('samples/flask2'), ['-m', 'mainmain'])
     test_project(Path('samples/flask3'), ['-m', 'subpkg.mainmain'])
     ecr_delete_images_all(
-        '094879913805.dkr.ecr.us-east-1.amazonaws.com/lambdorado_testing')
+        '094879913805.dkr.ecr.us-east-1.amazonaws.com/lambdarado_test:latest')
