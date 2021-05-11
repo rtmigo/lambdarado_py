@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 import os
+import sys
 import time
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -16,13 +17,22 @@ RED = '\033[31m'
 GREEN = '\033[32m'
 CRESET = '\033[0m'
 
-docker_image_name = 'lambdado_test'
+docker_image_name = 'lambdarado_test'
 top_level_dir = Path(__file__).parent.parent
 
 
+def should_run(n):
+    test_num = sys.argv[1] if len(sys.argv) >= 2 else None
+    return test_num == str(n) or test_num is None
+
+
+def test_project_path(name: str) -> Path:
+    return Path(__file__).parent / "projects" / name
+
+
 def build_docker_by_template(project_dir: Path, entrypoint_args: List[str]):
-    template = Path('samples/Dockerfile').read_text()
-    template = template.replace('PROJECTDIR', str(project_dir))
+    template = Path('tests/projects/Dockerfile').read_text()
+    template = template.replace('PROJECTDIR', str(project_dir.relative_to(top_level_dir)))
     template = template.replace('ENTRYPOINT_ARGS',
                                 ', '.join(f'"{s}"' for s in entrypoint_args))
 

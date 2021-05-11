@@ -9,11 +9,14 @@ from tempfile import TemporaryDirectory
 from typing import List
 
 from lambdado_pipeline import set_header_prefix, print_header
-from .common import check_base_url, wait_while_connection_error, top_level_dir
+from .common import check_base_url, wait_while_connection_error, top_level_dir, \
+    test_project_path, should_run
 
 
-def test_local(project_dir: Path, args_to_python: List[str]):
-    set_header_prefix(f"test_local {project_dir} {args_to_python}")
+def test_local(project: str, args_to_python: List[str]):
+
+    set_header_prefix(f"test_local {project} {args_to_python}")
+    project_dir = test_project_path(project)
 
     with TemporaryDirectory() as td:
         temp_project_dir = os.path.join(td, 'proj')
@@ -53,7 +56,15 @@ def test_local(project_dir: Path, args_to_python: List[str]):
 
 
 if __name__ == "__main__":
-    test_local(Path('samples/flask1'), ['main.py'])
-    test_local(Path('samples/flask2'), ['mainmain.py'])
-    test_local(Path('samples/flask2'), ['-m', 'mainmain'])
-    test_local(Path('samples/flask3'), ['-m', 'subpkg.mainmain'])
+
+    # I prefer to call the tests from GitHub Actions one at a time,
+    # otherwise the GitHub log is a mess.
+
+    if should_run(1):
+        test_local('flask1', ['main.py'])
+    if should_run(2):
+        test_local('flask2', ['mainmain.py'])
+    if should_run(3):
+        test_local('flask2', ['-m', 'mainmain'])
+    if should_run(4):
+        test_local('flask3', ['-m', 'subpkg.mainmain'])

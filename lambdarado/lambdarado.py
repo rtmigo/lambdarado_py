@@ -10,7 +10,6 @@ from types import ModuleType
 
 from apig_wsgi import make_lambda_handler
 from awslambdaric.__main__ import main as ric_main
-from flask import Flask
 
 
 def is_called_by_awslambdaric() -> bool:
@@ -40,15 +39,12 @@ def caller_module() -> ModuleType:
 
 def file_to_module_name(module: ModuleType) -> str:
     file_absolute = os.path.abspath(module.__file__)
-    #print(f"file_abspath {file_absolute}")
+    # print(f"file_abspath {file_absolute}")
     assert os.path.exists(file_absolute)
 
     file_relative = os.path.relpath(
         file_absolute,
         os.path.abspath(sys.path[0]))
-    #print(f"sys.path[0] {sys.path[0]}")
-    #print(f"sys.path[0] a {os.path.abspath(sys.path[0])}")
-    #print(f"rel {file_relative}")
 
     assert file_relative.lower().endswith('.py')
 
@@ -64,7 +60,7 @@ _log_requests = os.environ.get("LOG_LAMBDA_REQUESTS") == '1'
 _log_responses = os.environ.get("LOG_LAMBDA_RESPONSES") == '1'
 
 
-def assign_lambda_handler(module_name: str, app: Flask):
+def assign_lambda_handler(module_name: str, wsgi_app):
     """Defines the global `handler` function in the loaded module
     named `module_name`.
 
@@ -128,7 +124,7 @@ def assign_lambda_handler(module_name: str, app: Flask):
         return
 
     # noinspection PyTypeChecker
-    aws_handler: Callable = make_lambda_handler(app, binary_support=True)
+    aws_handler: Callable = make_lambda_handler(wsgi_app, binary_support=True)
 
     if _log_requests or _log_responses:
         def wrapper(event, context):
@@ -144,7 +140,7 @@ def assign_lambda_handler(module_name: str, app: Flask):
     module.__dict__['handler'] = aws_handler
 
 
-def hybrid_server(app: Flask) -> None:
+def start(get_app: Callable) -> None:
     module = caller_module()
     module_name = file_to_module_name(module)
 
@@ -154,6 +150,8 @@ def hybrid_server(app: Flask) -> None:
     # For some reason it is False when running in AWS Lambda
     # (deployed as Docker Container)
     in_docker = os.path.exists("/.dockerenv")
+
+    app = get_app()
 
     app.config['running-in-docker'] = in_docker
     app.config['running-in-aws'] = _in_aws
