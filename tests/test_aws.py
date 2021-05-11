@@ -13,7 +13,7 @@ def test_project(project_dir: Path, entrypoint_args: List[str]):
     # print("point 2")
     pushed_image_uri = docker_push_to_ecr(
         docker_image_name + ":latest",
-        '094879913805.dkr.ecr.us-east-1.amazonaws.com/lambdorado_testing:latest')
+        '094879913805.dkr.ecr.us-east-1.amazonaws.com/lambdarado_test:latest')
     # print("point 3")
     lambda_function_update('us-east-1', 'lambdorado_test', pushed_image_uri)
     check_base_url('https://jit9f5hzjk.execute-api.us-east-1.amazonaws.com')
