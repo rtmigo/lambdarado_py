@@ -12,11 +12,10 @@ on:
 #      - '**.md'
 #      - '**.txt'
 
-
 jobs:
 
   cancel-runs:
-    name: "Cancel the self CI workflow run"
+    name: "Cancel running ci.yml"
     runs-on: ubuntu-latest
     steps:
       - name: "Cancel workflow 1"
