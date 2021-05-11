@@ -16,12 +16,18 @@ on:
 jobs:
 
   cancel-runs:
+    #runs-on: ubuntu-latest
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - uses: n1hility/cancel-previous-runs@v2
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+      - name: cancel running workflows
+        uses: everphone-gmbh/cancel-previous-workflows@v5
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+#    steps:
+#    - uses: actions/checkout@v1
+#    - uses: n1hility/cancel-previous-runs@v2
+#      with:
+#        token: ${{ secrets.GITHUB_TOKEN }}
 
   test-local:
     needs: [cancel-runs]
