@@ -54,17 +54,19 @@ ENTRYPOINT ["python", "main.py"]
 import lambdarado import start
 
 def get_app():
-  # this method must return WSGI app, e.g. Flask
+  # this function must return WSGI app, e.g. Flask
   from my_app_module import app
   return app 
   
 start(get_app)
 ```
 
-When starting the Lambda function instance the `main.py` will be imported 
-*twice*, but the `get_app` method will only run *once*. If the creation of 
-the `app` object is resource intensive, make sure that it only happens when `get_app` is called.
+When starting the Lambda function instance, the `get_app` method will run *once*,
+but the `main.py` module will be imported *twice*. Make sure that the app is only created
+when `get_app` is called, not when `main.py` is imported.
 
+In other words, simply running `python3 main.py` without calling `start` should 
+NOT do anything heavy and probably should not even declare or import the `app`.
 
 # Run
 
