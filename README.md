@@ -11,7 +11,7 @@ the [debug server](https://pypi.org/project/Werkzeug/), serving requests to
 container (`docker run ...`) to test the app.
 
 In the AWS Cloud the requests are handled with the same `app`, but in a
-different way. Lambdarado will create
+different way. Lambdarado creates
 the [handler](https://docs.aws.amazon.com/lambda/latest/dg/python-handler.html),
 that is compatible with the combination of API Gateway + Lambda Function.
 
