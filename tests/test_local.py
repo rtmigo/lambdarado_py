@@ -37,6 +37,8 @@ def test_local(project_dir: Path, args_to_python: List[str]):
                         '--use-feature=in-tree-build',
                         copied_distro_dir))
 
+        print_header('Testing')
+
         call_args = [temp_python]
         call_args.extend(args_to_python)
 
