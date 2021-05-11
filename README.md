@@ -21,7 +21,7 @@ So the Lambdarado puts together:
 
 - A web application written in Python that is compliant with the
   [WSGI](https://en.wikipedia.org/wiki/Web_Server_Gateway_Interface) standard.
-  Currently, only [Flask](https://pypi.org/project/Flask/) is supported.
+  Currently, only [Flask](https://pypi.org/project/Flask/) is supported
 
 - A [Docker image](https://docs.aws.amazon.com/lambda/latest/dg/images-create.html)
 that contains the application code and dependencies
