@@ -10,7 +10,7 @@ from typing import List
 
 from lambdado_pipeline import set_header_prefix, print_header
 from .common import check_base_url, wait_while_connection_error, top_level_dir, \
-    test_project_path
+    test_project_path, should_run
 
 
 def test_local(project: str, args_to_python: List[str]):
@@ -56,7 +56,11 @@ def test_local(project: str, args_to_python: List[str]):
 
 
 if __name__ == "__main__":
-    test_local('flask1', ['main.py'])
-    test_local('flask2', ['mainmain.py'])
-    test_local('flask2', ['-m', 'mainmain'])
-    test_local('flask3', ['-m', 'subpkg.mainmain'])
+    if should_run(1):
+        test_local('flask1', ['main.py'])
+    if should_run(2):
+        test_local('flask2', ['mainmain.py'])
+    if should_run(3):
+        test_local('flask2', ['-m', 'mainmain'])
+    if should_run(4):
+        test_local('flask3', ['-m', 'subpkg.mainmain'])

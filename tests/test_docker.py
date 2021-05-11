@@ -6,7 +6,8 @@ from typing import List
 
 from lambdado_pipeline import set_header_prefix, docker_run, docker_stop
 from .common import check_base_url, build_docker_by_template, \
-    docker_image_name, wait_while_connection_error, test_project_path
+    docker_image_name, wait_while_connection_error, test_project_path, \
+    should_run
 
 
 def test_project(project: str, entrypoint_args: List[str]):
@@ -29,7 +30,11 @@ def test_project(project: str, entrypoint_args: List[str]):
 
 
 if __name__ == "__main__":
-    test_project('flask1', ['main.py'])
-    test_project('flask2', ['mainmain.py'])
-    test_project('flask2', ['-m', 'mainmain'])
-    test_project('flask3', ['-m', 'subpkg.mainmain'])
+    if should_run(1):
+        test_project('flask1', ['main.py'])
+    if should_run(2):
+        test_project('flask2', ['mainmain.py'])
+    if should_run(3):
+        test_project('flask2', ['-m', 'mainmain'])
+    if should_run(4):
+        test_project('flask3', ['-m', 'subpkg.mainmain'])
