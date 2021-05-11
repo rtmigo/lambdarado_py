@@ -14,6 +14,7 @@ setup(
 
     install_requires=['apig_wsgi', 'awslambdaric'],
     packages=['lambdarado'],
+    
 
     description="Universal entry point for Docker images containing "
                 "WSGI apps for the AWS Lambda.",
