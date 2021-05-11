@@ -1,25 +1,34 @@
-Universal entry point for Docker images containing a Flask application for the
+Universal entry point for Docker images containing Flask apps for the
 AWS Lambda serverless platform.
 
-Putting together:
+---
+
+It runs the relevant code depending on where it runs.
+
+On the local computer, it runs
+the [debug server](https://pypi.org/project/Werkzeug/), serving requests to
+`127.0.0.1` with your `app`. You can start it directly (`python3 main.py`) or from a
+container (`docker run ...`) to test the app.
+
+In the AWS Cloud the requests are handled with the same `app`, but in a
+different way. Lambdarado creates
+a [handler](https://docs.aws.amazon.com/lambda/latest/dg/python-handler.html),
+that is compatible with the combination of API Gateway + Lambda Function.
+
+---
+
+So the Lambdarado puts together:
 
 - A web application written in Python that is compliant with the
-  [WSGI standard](https://en.wikipedia.org/wiki/Web_Server_Gateway_Interface).
-  Currently, only **Flask** is supported.
+  [WSGI](https://en.wikipedia.org/wiki/Web_Server_Gateway_Interface) standard.
+  Currently, only [Flask](https://pypi.org/project/Flask/) is supported
+
 - A [Docker image](https://docs.aws.amazon.com/lambda/latest/dg/images-create.html)
-  that contains the application code and dependencies
+that contains the app code and dependencies
+
 - AWS Lambda to run the code contained in the Docker image
+
 - AWS API Gateway, that broadcasts web requests to and from your Lambda function
-
-# What it does
-
-The package runs the relevant code depending on where it runs.
-
-On the local computer, this is the debug server, serving requests to
-`127.0.0.1` right in the browser.
-
-In the AWS cloud, this is the handler that passes Gateway requests to and from
-the WSGI application.
 
 # Install
 
@@ -52,9 +61,10 @@ def get_app():
 start(get_app)
 ```
 
-The `main.py` file will be imported *twice* when starting the server in AWS. 
-The `get_app` method will only run *once*. Therefore, it is worth making sure 
-that the application is initialized only when you call `get_app`.
+When starting the Lambda function instance the `main.py` will be imported 
+*twice*, but the `get_app` method will only run *once*. If the creation of 
+the `app` object is resource intensive, make sure that it only happens when `get_app` is called.
+
 
 # Run
 

@@ -16,4 +16,6 @@ def get_app():
     return app
 
 
+print("RUNNING main.py")
+
 start(get_app)
