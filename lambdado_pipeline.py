@@ -224,6 +224,9 @@ def docker_push_to_ecr(docker_image: str,
         capture_output=True,
         encoding='utf-8')
     if cp.returncode != 0:
+        print("Captured before error:")
+        print("stdout:", cp.stdout)
+        print("stderr:", cp.stderr)
         raise CalledProcessError(cp.returncode, cp.args)
 
     digest = _get_digest(cp.stdout)
