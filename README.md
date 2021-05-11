@@ -62,7 +62,7 @@ start(get_app)
 ```
 
 When starting the Lambda function instance, the `main.py` will be imported 
-*twice* and the `get_app` method will run *once*. Therefore, it is 
+*twice*, but the `get_app` method will only run *once*. Therefore, it is 
 better to initialize the app only when `get_app` is called.
 
 # Run
