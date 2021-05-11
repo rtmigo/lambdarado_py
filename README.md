@@ -64,7 +64,7 @@ start(get_app)
 The `main.py` file will be imported *twice* when starting the Lambda function
 instance in AWS. The `get_app` method will only run *once*. Therefore, it is
 worth making sure that the application is initialized only when you
-call `get_app`.
+call `get_app`, and not when you just import `main.py`.
 
 # Run
 
