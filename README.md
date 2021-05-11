@@ -24,7 +24,7 @@ the WSGI application.
 # Install
 
 ``` bash
-$ pip3 install git+https://github.com/rtmigo/lambdarado_py#egg=lambdarado 
+$ pip3 install lambdarado 
 ```
 
 # Configure
