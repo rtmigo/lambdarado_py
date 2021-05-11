@@ -6,4 +6,5 @@ def get_app():
     return app
 
 
+#start(get_app)
 start(get_app)
