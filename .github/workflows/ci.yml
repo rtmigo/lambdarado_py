@@ -93,15 +93,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r tests/requirements.txt
       - name: Run test 1
-        run: python3 -m tests.test_lambda 1
+        run: python3 -m tests.test_aws 1
       - name: Run test 2
-        run: python3 -m tests.test_lambda 2
+        run: python3 -m tests.test_aws 2
       - name: Run test 3
-        run: python3 -m tests.test_lambda 3
+        run: python3 -m tests.test_aws 3
       - name: Run test 4
-        run: python3 -m tests.test_lambda 4
+        run: python3 -m tests.test_aws 4
       - name: Cleanup
-        run: python3 -m tests.test_lambda cleanup
+        run: python3 -m tests.test_aws cleanup
 #  test:
 #    timeout-minutes: 7
 #
