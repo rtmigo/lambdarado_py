@@ -14,9 +14,6 @@ on:
 
 jobs:
 
-
-
-
   test-local:
 
     timeout-minutes: 7
