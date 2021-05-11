@@ -20,8 +20,12 @@ docker_image_name = 'lambdado_test'
 top_level_dir = Path(__file__).parent.parent
 
 
+def test_project_path(name: str) -> Path:
+    return Path(__file__).parent / "projects" / name
+
+
 def build_docker_by_template(project_dir: Path, entrypoint_args: List[str]):
-    template = Path('samples/Dockerfile').read_text()
+    template = Path('projects/Dockerfile').read_text()
     template = template.replace('PROJECTDIR', str(project_dir))
     template = template.replace('ENTRYPOINT_ARGS',
                                 ', '.join(f'"{s}"' for s in entrypoint_args))

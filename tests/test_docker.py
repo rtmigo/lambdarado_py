@@ -6,11 +6,12 @@ from typing import List
 
 from lambdado_pipeline import set_header_prefix, docker_run, docker_stop
 from .common import check_base_url, build_docker_by_template, \
-    docker_image_name, wait_while_connection_error
+    docker_image_name, wait_while_connection_error, test_project_path
 
 
-def test_project(project_dir: Path, entrypoint_args: List[str]):
-    set_header_prefix(f"test_project {project_dir} {entrypoint_args}")
+def test_project(project: str, entrypoint_args: List[str]):
+    set_header_prefix(f"test_project {project} {entrypoint_args}")
+    project_dir = test_project_path(project)
 
     build_docker_by_template(project_dir, entrypoint_args)
     container_name = "testing_lambdado_server"
@@ -28,7 +29,7 @@ def test_project(project_dir: Path, entrypoint_args: List[str]):
 
 
 if __name__ == "__main__":
-    test_project(Path('samples/flask1'), ['main.py'])
-    test_project(Path('samples/flask2'), ['mainmain.py'])
-    test_project(Path('samples/flask2'), ['-m', 'mainmain'])
-    test_project(Path('samples/flask3'), ['-m', 'subpkg.mainmain'])
+    test_project('flask1', ['main.py'])
+    test_project('flask2', ['mainmain.py'])
+    test_project('flask2', ['-m', 'mainmain'])
+    test_project('flask3', ['-m', 'subpkg.mainmain'])

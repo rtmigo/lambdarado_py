@@ -18,7 +18,7 @@ The package runs the relevant code depending on where it runs.
 On the local computer, this is the debug server, serving requests to
 `127.0.0.1` right in the browser.
 
-In the AWS Cloud, this is the handler that passes Gateway requests to and from
+In the AWS cloud, this is the handler that passes Gateway requests to and from
 the WSGI application.
 
 # Install
@@ -42,10 +42,19 @@ ENTRYPOINT ["python", "main.py"]
 #### main.py
 
 ``` python3
-from lambdarado import hybrid_server
-from my_app import app  # WSGI app, e.g. Flask
-hybrid_server(app)
+import lambdarado import start
+
+def get_app():
+  # this method must return WSGI app, e.g. Flask
+  from my_app_module import app
+  return app 
+  
+start(get_app)
 ```
+
+The `main.py` file will be imported *twice* when starting the server in AWS. 
+The `get_app` method will only run *once*. Therefore, it is worth making sure 
+that the application is initialized only when you call `get_app`.
 
 # Run
 
