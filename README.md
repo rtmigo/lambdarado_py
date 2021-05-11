@@ -6,9 +6,8 @@ Putting together:
 - A web application written in Python that is compliant with the
   [WSGI standard](https://en.wikipedia.org/wiki/Web_Server_Gateway_Interface).
   Currently, only **Flask** is supported.
--
-A [Docker image](https://docs.aws.amazon.com/lambda/latest/dg/images-create.html)
-that contains the application code and dependencies
+- A [Docker image](https://docs.aws.amazon.com/lambda/latest/dg/images-create.html)
+  that contains the application code and dependencies
 - AWS Lambda to run the code contained in the Docker image
 - AWS API Gateway, that broadcasts web requests to and from your Lambda function
 
