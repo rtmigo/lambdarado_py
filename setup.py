@@ -1,9 +1,13 @@
+from importlib.machinery import SourceFileLoader
 from pathlib import Path
 from setuptools import setup
 
+constants = SourceFileLoader('constants',
+                             'lambdarado/constants.py').load_module()
+
 setup(
     name="lambdarado",
-    version="0.0.0",
+    version=constants.__dict__['__version__'],
     author="Artёm IG",
     author_email="ortemeo@gmail.com",
     url='https://github.com/rtmigo/lambdarado_py',
