@@ -59,6 +59,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_LAMBDARADO_TESTER_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_LAMBDARADO_TESTER_SECRET_KEY }}
+          # aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }} # if you have/need it
+          aws-region: us-east-1
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -67,7 +74,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r tests/requirements.txt
-      - name: Run unit tests (docker)
+      - name: Run unit tests (lambda)
         run: |
           python3 -m tests.test_aws
 
