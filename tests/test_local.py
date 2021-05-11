@@ -8,7 +8,7 @@ from subprocess import check_call, Popen
 from tempfile import TemporaryDirectory
 from typing import List
 
-from lambdado_pipeline import set_header_prefix, print_header
+from awscmds import set_header_prefix, print_header
 from .common import check_base_url, wait_while_connection_error, top_level_dir, \
     test_project_path, should_run
 
