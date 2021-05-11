@@ -61,9 +61,11 @@ def get_app():
 start(get_app)
 ```
 
-When starting the Lambda function instance, the `main.py` will be imported 
-*twice*, but the `get_app` method will only run *once*. Therefore, it is 
-better to initialize the app only when `get_app` is called.
+When starting the Lambda function instance:
+- the `main.py` will be imported *twice*
+- the `get_app` method will only run *once*. 
+  
+Therefore, it is better to initialize the app only when `get_app` is called.
 
 # Run
 
