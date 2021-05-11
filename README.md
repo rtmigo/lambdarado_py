@@ -10,7 +10,7 @@ the [debug server](https://pypi.org/project/Werkzeug/), serving requests to
 `127.0.0.1` with your `app`. You can start it directly (`python3 main.py`) or from a
 container (`docker run ...`) to test the app.
 
-In the AWS Cloud requests will be handled with the same `app`, but in a
+In the AWS Cloud the requests are handled with the same `app`, but in a
 different way. Lambdarado will create
 the [handler](https://docs.aws.amazon.com/lambda/latest/dg/python-handler.html),
 that is compatible with the combination of API Gateway + Lambda Function.
