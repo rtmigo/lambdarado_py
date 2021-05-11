@@ -56,6 +56,10 @@ def test_local(project: str, args_to_python: List[str]):
 
 
 if __name__ == "__main__":
+
+    # I prefer to call the tests from GitHub Actions one at a time,
+    # otherwise the GitHub log is a mess.
+
     if should_run(1):
         test_local('flask1', ['main.py'])
     if should_run(2):

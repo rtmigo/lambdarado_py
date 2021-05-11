@@ -30,6 +30,10 @@ def test_project(project: str, entrypoint_args: List[str]):
 
 
 if __name__ == "__main__":
+
+    # I prefer to call the tests from GitHub Actions one at a time,
+    # otherwise the GitHub log is a mess.
+
     if should_run(1):
         test_project('flask1', ['main.py'])
     if should_run(2):
