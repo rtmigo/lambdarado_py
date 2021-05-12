@@ -12,7 +12,7 @@ setup(
     author_email="ortemeo@gmail.com",
     url='https://github.com/rtmigo/lambdarado_py#readme',
 
-    install_requires=['apig_wsgi', 'awslambdaric'],
+    install_requires=['apig_wsgi', 'awslambdaric', 'aws-lambda-context'],
     packages=['lambdarado'],
 
 
