@@ -1,34 +1,32 @@
-Universal entry point for Docker images containing Flask apps for the
-AWS Lambda serverless platform.
+Lambdarado puts together:
+
+- A [Flask](https://pypi.org/project/Flask/) app written in Python
+
+- A [Docker image](https://docs.aws.amazon.com/lambda/latest/dg/images-create.html)
+that contains the app code and dependencies
+
+- AWS Lambda + AWS Gateway to run the app in the AWS
+
+- [Werkzeug](https://pypi.org/project/Werkzeug/) to test app locally 
 
 ---
 
 It runs the relevant code depending on where it runs.
 
 On the local computer, it runs
-the [debug server](https://pypi.org/project/Werkzeug/), serving requests to
+the a debug server, serving requests to
 `127.0.0.1` with your `app`. You can start it directly (`python3 main.py`) or from a
 container (`docker run ...`) to test the app.
 
 In the AWS Cloud the requests are handled with the same `app`, but in a
 different way. Lambdarado creates
 a [handler](https://docs.aws.amazon.com/lambda/latest/dg/python-handler.html),
-that is compatible with the combination of API Gateway + Lambda Function.
+that is compatible with the combination of API Gateway + Lambda.
 
 ---
 
-So the Lambdarado puts together:
 
-- A web application written in Python that is compliant with the
-  [WSGI](https://en.wikipedia.org/wiki/Web_Server_Gateway_Interface) standard.
-  Currently, only [Flask](https://pypi.org/project/Flask/) is supported
 
-- A [Docker image](https://docs.aws.amazon.com/lambda/latest/dg/images-create.html)
-that contains the app code and dependencies
-
-- AWS Lambda to run the code contained in the Docker image
-
-- AWS API Gateway, that broadcasts web requests to and from your Lambda function
 
 # Install
 
