@@ -3,7 +3,7 @@ from pathlib import Path
 from setuptools import setup
 
 constants = SourceFileLoader('constants',
-                             'lambdarado/constants.py').load_module()
+                             'lambdarado/_constants.py').load_module()
 
 setup(
     name="lambdarado",
@@ -14,7 +14,7 @@ setup(
 
     install_requires=['apig_wsgi', 'awslambdaric'],
     packages=['lambdarado'],
-    
+
 
     description="Universal entry point for Docker images containing "
                 "WSGI apps for the AWS Lambda.",

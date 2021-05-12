@@ -1,2 +1,2 @@
-from .constants import __version__
-from .lambdarado import start
+from ._constants import __version__
+from ._lambdarado import start
