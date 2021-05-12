@@ -46,6 +46,10 @@ FROM public.ecr.aws/lambda/python:3.8
 ENTRYPOINT ["python", "main.py"]
 ```
 
+You build the image [as usual](https://docs.aws.amazon.com/lambda/latest/dg/images-create.html),
+but the `ENTRYPOINT` is just a call to a `.py` file in the project root.
+And there is no `CMD`.
+
 #### main.py
 
 ``` python3
