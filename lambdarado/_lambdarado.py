@@ -5,8 +5,9 @@ import os
 import sys
 import json
 import inspect
-from typing import Callable
+from typing import Callable, Any, Dict
 from types import ModuleType
+from aws_lambda_context import LambdaContext
 
 from apig_wsgi import make_lambda_handler
 from awslambdaric.__main__ import main as ric_main
@@ -15,8 +16,8 @@ from awslambdaric.__main__ import main as ric_main
 def is_called_by_awslambdaric() -> bool:
     """Returns True when the current function is called by `awslambdaric`
     module. This happens when awslambdaric is importing the lambda handler
-    and the `is_inside_ric` is called by the module that defines the
-    handler.
+    and the `is_called_by_awslambdaric` is called by the module that defines
+    the handler.
     """
     for frame in inspect.stack():
         # /opt/venv/lib/python3.8/site-packages/awslambdaric/bootstrap.py
@@ -56,11 +57,50 @@ def file_to_module_name(module: ModuleType) -> str:
 
 # AWS_LAMBDA_RUNTIME_API AWS_EXECUTION_ENV
 _in_aws = os.environ.get("AWS_EXECUTION_ENV") is not None
-_log_requests = os.environ.get("LOG_LAMBDA_REQUESTS") == '1'
-_log_responses = os.environ.get("LOG_LAMBDA_RESPONSES") == '1'
+
+AwsHandlerFunc = Callable[[Dict, LambdaContext], Dict]
+WrapAwsHandlerFunc = Callable[[AwsHandlerFunc], AwsHandlerFunc]
 
 
-def assign_lambda_handler(module_name: str, wsgi_app):
+def _wrap_aws_handler_default(handler: AwsHandlerFunc) -> AwsHandlerFunc:
+    """Used as a default value for start(wrap_handler=...).
+
+    Creates a handler that will write JSON requests and responses to the
+    stdout (i.e. CloudWatch logs). The writing is only happens when either
+    LOG_LAMBDA_REQUESTS or LOG_LAMBDA_RESPONSES environment variable is set.
+    """
+    # todo unit test
+    if _wrap_aws_handler_default.log_requests is None:
+        _wrap_aws_handler_default.log_requests = \
+            str(os.environ.get("LOG_LAMBDA_REQUESTS")) == '0'
+        _wrap_aws_handler_default.log_responses = \
+            str(os.environ.get("LOG_LAMBDA_RESPONSES")) == '0'
+
+    if _wrap_aws_handler_default.log_requests \
+            or _wrap_aws_handler_default.log_responses:
+        # if something should be logged
+        def wrapper(event: Dict, context: LambdaContext) -> Dict:
+            if _wrap_aws_handler_default.log_requests:
+                print(json.dumps(event, indent=2, sort_keys=True))
+            response = handler(event, context)
+            if _wrap_aws_handler_default.log_responses:
+                print(json.dumps(response, indent=2, sort_keys=True))
+            return response
+
+        return wrapper
+
+    else:
+        # do not wrap
+        return handler
+
+
+_wrap_aws_handler_default.log_requests = None
+_wrap_aws_handler_default.log_responses = None
+
+
+def assign_lambda_handler(module_name: str,
+                          wsgi_app,
+                          wrap_handler: WrapAwsHandlerFunc = None):
     """Defines the global `handler` function in the loaded module
     named `module_name`.
 
@@ -88,7 +128,7 @@ def assign_lambda_handler(module_name: str, wsgi_app):
     # PROBLEM 1
     # ---------
     #
-    # But we want to keep `basename.py` as simple as possible. We
+    # We want to keep `basename.py` as simple as possible. We
     # assume, it contains only
     #
     # ```
@@ -112,7 +152,7 @@ def assign_lambda_handler(module_name: str, wsgi_app):
     #
     # We have to assign the `handler` to the `basename` module only
     # when it is re-imported by the `ric_main`. Defining `handler` on
-    # `__main` will have to effect.
+    # `__main__` will have to effect.
 
     if module_name not in sys.modules:
         return
@@ -124,23 +164,48 @@ def assign_lambda_handler(module_name: str, wsgi_app):
         return
 
     # noinspection PyTypeChecker
-    aws_handler: Callable = make_lambda_handler(wsgi_app, binary_support=True)
+    aws_handler: AwsHandlerFunc = make_lambda_handler(wsgi_app,
+                                                      binary_support=True)
 
-    if _log_requests or _log_responses:
-        def wrapper(event, context):
-            if _log_requests:
-                print(json.dumps(event, indent=2, sort_keys=True))
-            response = aws_handler(event, context)
-            if _log_responses:
-                print(json.dumps(response, indent=2, sort_keys=True))
-            return response
-
-        aws_handler = wrapper
+    # todo unit test
+    if wrap_handler is not None:
+        aws_handler = wrap_handler(aws_handler)
 
     module.__dict__['handler'] = aws_handler
 
 
-def start(get_app: Callable) -> None:
+def start(get_app: Callable,
+          wrap_handler: WrapAwsHandlerFunc = _wrap_aws_handler_default) -> None:
+    """
+    Starts serving requests.
+
+    :param get_app: Function that initializes and returns the Flask app.
+
+        def get_app():
+            app = Flask(__name__)
+
+            @app.route('/hello')
+            def hello():
+                return 'Hello, client!'
+
+            return app
+
+        start(get_app)
+
+    :param wrap_handler: An optional function, that will wrap the lambda
+    handler, probably adding some additional functionality to each call of the
+    lambda function.
+
+        def wrap_my_handler(old_handler):
+            def new_handler(event, context):
+                print(event['input']['headers'])
+                response = old_handler(event, context)
+                return response
+
+        start(get_app, wrap_handler = wrap_my_handler)
+
+    :return: None
+    """
     module = caller_module()
     module_name = file_to_module_name(module)
 
@@ -157,7 +222,7 @@ def start(get_app: Callable) -> None:
     app.config['running-in-aws'] = _in_aws
 
     if _in_aws:
-        assign_lambda_handler(module_name, app)
+        assign_lambda_handler(module_name, app, wrap_handler)
         if not is_called_by_awslambdaric():
             arg = f'{module_name}.handler'
             print(f'Starting AWS Lambda RIC with arg "{arg}"')
