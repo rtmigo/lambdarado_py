@@ -3,24 +3,24 @@ from pathlib import Path
 from setuptools import setup
 
 constants = SourceFileLoader('constants',
-                             'lambdarado/constants.py').load_module()
+                             'lambdarado/_constants.py').load_module()
 
 setup(
     name="lambdarado",
     version=constants.__dict__['__version__'],
     author="Artёm IG",
     author_email="ortemeo@gmail.com",
-    url='https://github.com/rtmigo/lambdarado_py',
-
+    url='https://github.com/rtmigo/lambdarado_py#readme',
 
     install_requires=['apig_wsgi', 'awslambdaric'],
     packages=['lambdarado'],
 
+
     description="Universal entry point for Docker images containing "
-                "a WSGI app for the AWS Lambda.",
+                "WSGI apps for the AWS Lambda.",
 
     keywords="amazon aws lambda function entrypoint docker image container "
-             "wsgi flask http api gateway".split(),
+             "wsgi flask http api gateway serverless app".split(),
 
     long_description=(Path(__file__).parent / 'README.md').read_text(),
     long_description_content_type='text/markdown',

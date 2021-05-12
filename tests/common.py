@@ -11,7 +11,7 @@ from typing import List
 import requests
 
 # Class of different styles
-from lambdado_pipeline import docker_build
+from awscmds import docker_build
 
 RED = '\033[31m'
 GREEN = '\033[32m'

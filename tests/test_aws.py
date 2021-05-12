@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 from typing import List
 
-from lambdado_pipeline import docker_push_to_ecr, \
+from awscmds import docker_push_to_ecr, \
     lambda_function_update, set_header_prefix, ecr_delete_images_all
 from .common import check_base_url, build_docker_by_template, docker_image_name, \
     test_project_path, should_run
