@@ -90,11 +90,11 @@ Local debug server in Docker
 Command-line:
 
 ``` bash
-$ docker run -p 6000:5000 docker-image-name
+$ docker run -p 5005:5000 docker-image-name
 ```
 
 This will start Werkzeug server listening to http://0.0.0.0:5000
-(inside the docker). The server is accessible as http://127.0.0.1:6000
+(inside the docker). The server is accessible as http://127.0.0.1:5005
 from the development (host) machine.
 
 
