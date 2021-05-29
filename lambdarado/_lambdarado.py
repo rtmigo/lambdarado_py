@@ -1,16 +1,17 @@
 # SPDX-FileCopyrightText: (c) 2021 Artёm IG <github.com/rtmigo>
 # SPDX-License-Identifier: MIT
 
+import inspect
 import os
 import sys
-import json
-import inspect
-from typing import Callable, Any, Dict
 from types import ModuleType
-from aws_lambda_context import LambdaContext
+from typing import Callable
 
 from apig_wsgi import make_lambda_handler
 from awslambdaric.__main__ import main as ric_main
+
+from lambdarado._common import WrapAwsHandlerFunc, AwsHandlerFunc
+from lambdarado._wrap_handler_default import wrap_aws_handler_default
 
 
 def is_called_by_awslambdaric() -> bool:
@@ -29,9 +30,13 @@ def is_called_by_awslambdaric() -> bool:
 
 
 def caller_module() -> ModuleType:
-    frame = inspect.currentframe().f_back
+    frame = inspect.currentframe()
+    assert frame is not None
+    frame = frame.f_back
     while frame is not None:
         module = inspect.getmodule(frame)
+        if module is None:  # when in can be true?!
+            continue
         if module.__file__ != __file__:
             return module
         frame = frame.f_back
@@ -57,45 +62,6 @@ def file_to_module_name(module: ModuleType) -> str:
 
 # AWS_LAMBDA_RUNTIME_API AWS_EXECUTION_ENV
 _in_aws = os.environ.get("AWS_EXECUTION_ENV") is not None
-
-AwsHandlerFunc = Callable[[Dict, LambdaContext], Dict]
-WrapAwsHandlerFunc = Callable[[AwsHandlerFunc], AwsHandlerFunc]
-
-
-def _wrap_aws_handler_default(handler: AwsHandlerFunc) -> AwsHandlerFunc:
-    """Used as a default value for start(wrap_handler=...).
-
-    Creates a handler that will write JSON requests and responses to the
-    stdout (i.e. CloudWatch logs). The writing is only happens when either
-    LOG_LAMBDA_REQUESTS or LOG_LAMBDA_RESPONSES environment variable is set.
-    """
-    # todo unit test
-    if _wrap_aws_handler_default.log_requests is None:
-        _wrap_aws_handler_default.log_requests = \
-            str(os.environ.get("LOG_LAMBDA_REQUESTS")) == '0'
-        _wrap_aws_handler_default.log_responses = \
-            str(os.environ.get("LOG_LAMBDA_RESPONSES")) == '0'
-
-    if _wrap_aws_handler_default.log_requests \
-            or _wrap_aws_handler_default.log_responses:
-        # if something should be logged
-        def wrapper(event: Dict, context: LambdaContext) -> Dict:
-            if _wrap_aws_handler_default.log_requests:
-                print(json.dumps(event, indent=2, sort_keys=True))
-            response = handler(event, context)
-            if _wrap_aws_handler_default.log_responses:
-                print(json.dumps(response, indent=2, sort_keys=True))
-            return response
-
-        return wrapper
-
-    else:
-        # do not wrap
-        return handler
-
-
-_wrap_aws_handler_default.log_requests = None
-_wrap_aws_handler_default.log_responses = None
 
 
 def assign_lambda_handler(module_name: str,
@@ -175,7 +141,7 @@ def assign_lambda_handler(module_name: str,
 
 
 def start(get_app: Callable,
-          wrap_handler: WrapAwsHandlerFunc = _wrap_aws_handler_default) -> None:
+          wrap_handler: WrapAwsHandlerFunc = wrap_aws_handler_default) -> None:
     """
     Starts serving requests.
 
