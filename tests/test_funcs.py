@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from lambdarado._lambdarado import _is_true_environ
+from lambdarado._wrap_handler_default import _is_true_environ
 
 
 class TestEnviron(unittest.TestCase):

@@ -30,9 +30,13 @@ def is_called_by_awslambdaric() -> bool:
 
 
 def caller_module() -> ModuleType:
-    frame = inspect.currentframe().f_back
+    frame = inspect.currentframe()
+    assert frame is not None
+    frame = frame.f_back
     while frame is not None:
         module = inspect.getmodule(frame)
+        if module is None:  # when in can be true?!
+            continue
         if module.__file__ != __file__:
             return module
         frame = frame.f_back
