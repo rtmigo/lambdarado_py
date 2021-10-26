@@ -1,7 +1,6 @@
 # SPDX-FileCopyrightText: (c) 2021 Artёm IG <github.com/rtmigo>
 # SPDX-License-Identifier: MIT
 
-from pathlib import Path
 from typing import List
 
 from awscmds import set_header_prefix, docker_run, docker_stop

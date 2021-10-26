@@ -1,7 +1,6 @@
 # SPDX-FileCopyrightText: (c) 2021 Artёm IG <github.com/rtmigo>
 # SPDX-License-Identifier: MIT
-import sys
-from pathlib import Path
+
 from typing import List
 
 from awscmds import docker_push_to_ecr, \
