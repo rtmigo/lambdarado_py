@@ -5,10 +5,10 @@ import inspect
 import os
 import sys
 from types import ModuleType
-from typing import Callable
 
 from apig_wsgi import make_lambda_handler
 from awslambdaric.__main__ import main as ric_main
+from typing import Callable
 
 from lambdarado._common import WrapAwsHandlerFunc, AwsHandlerFunc
 from lambdarado._wrap_handler_default import wrap_aws_handler_default
