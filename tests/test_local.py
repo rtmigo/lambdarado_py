@@ -3,7 +3,6 @@
 
 import os
 import shutil
-from pathlib import Path
 from subprocess import check_call, Popen
 from tempfile import TemporaryDirectory
 from typing import List
