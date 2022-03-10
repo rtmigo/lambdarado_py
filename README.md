@@ -53,7 +53,7 @@ And there is no `CMD`.
 #### main.py
 
 ``` python3
-import lambdarado import start
+from lambdarado import start
 
 def get_app():
   # this function must return WSGI app, e.g. Flask
