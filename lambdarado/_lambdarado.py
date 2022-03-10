@@ -44,10 +44,9 @@ def caller_module() -> ModuleType:
 
 
 def file_to_module_name(module: ModuleType) -> str:
-    fn = module.__file__
-    assert fn is not None
-    file_absolute = os.path.abspath(fn)
-    # print(f"file_abspath {file_absolute}")
+    module_filename = module.__file__
+    assert module_filename is not None
+    file_absolute = os.path.abspath(module_filename)
     assert os.path.exists(file_absolute)
 
     file_relative = os.path.relpath(
